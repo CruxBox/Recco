@@ -1,0 +1,140 @@
+
+@import url('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+
+html{
+	scroll-behavior: smooth;
+	}
+body{
+	margin:0; 
+	font-family:'Poppins',sans-serif; 
+}
+* {
+	box-sizing:border-box; 
+	margin: 0;
+}
+
+.container{
+	max-width: 1140px;
+	margin: auto;	
+}
+.row{
+	display: flex;
+	flex-wrap: wrap;
+}
+
+header{
+position: absolute;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	border-bottom: 1px solid #423940;
+	padding:0px 10px;
+  z-index: 11;
+  background-color: #000000;
+  
+}
+
+header .row{
+	justify-content:space-between;
+	align-items: center; 
+}
+
+header .brand-name a{
+	text-decoration :none;
+	font-size: 22px;
+	font-weight: 600;
+	color: #ffffff;
+	text-transform: uppercase;
+	position: relative;
+}
+header.fixed .brand-name a{
+	color: #000000;
+}
+header .navbar ul{
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+header .navbar ul li{
+	display: inline-block;
+	margin-left: 35px;
+}
+header .navbar ul li a{
+	font-size: 15px;
+	text-decoration:none;
+	line-height: 72px;
+	color: #ffffff;
+	display: block;
+	font-weight: 600; 
+	position: relative;
+}
+header.fixed .navbar ul li a{
+color: #000000;
+}
+header .navbar ul li a::before{
+	content: '';
+	height: 3px;
+	background-color: #ffffff;
+	width: 0%;
+	position: absolute;
+	right: 0px;
+	bottom: -1px;
+	transition: all .5s ease;
+}
+header.fixed .navbar ul li a::before{
+	background-color: #febd01;
+
+}
+header .navbar ul li a:hover::before{
+	width: 100%;
+	left: 0;	
+}
+header .navbar ul li a:active::before{
+	width: 100%;
+	left: 0;	
+}
+.search {
+  width: 100%;
+  position: relative;
+  display: flex;
+}
+
+.searchTerm {
+  width: 100%;
+  border-bottom: 1px white solid;
+  border-right: none;
+  border-top: none;
+  border-left: none;
+  background-color: black;
+  padding: 5px;
+  height: 35px;
+  outline: none;
+  color: #9DBFAF;
+}
+
+.searchTerm:focus{
+  color: white;
+}
+
+.searchButton {
+  width: 40px;
+  height: 35px;
+  border-bottom: 1px white solid;
+  background: black;
+  border-right: none;
+  border-top: none;
+  border-left: none;
+  text-align: center;
+  color: #fff;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/*Resize the wrap to see the search bar change!*/
+.wrap{
+  width: 30%;
+  position: absolute;
+  top: 50%;
+  left: 40%;
+  transform: translate(-50%, -50%);
+}
