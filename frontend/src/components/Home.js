@@ -1,13 +1,11 @@
-import React from "react";
-
-function Home(){
-
-
-    return (
-        <div>
-            Home
-        </div>
-    )
+import React from 'react';
+import './Home.css';
+function Home() {
+  return (
+    <div className="Home">
+    <h1> Home page</h1>
+    </div>
+    );
 }
 
 export default Home;
