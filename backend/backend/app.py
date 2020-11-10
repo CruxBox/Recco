@@ -49,7 +49,7 @@ class TmdbApiManager:
                 URI encoded.
             page: (optional) Minimum 1, maximum 1000, default 1.
             include_adult: (optional) Choose whether to inlcude adult
-                (pornography) content in the results.
+                 content in the results.
             region: (optional) Specify a ISO 3166-1 code to filter release
                 dates. Must be uppercase.
             year: (optional) A filter to limit the results to a specific year
@@ -59,7 +59,7 @@ class TmdbApiManager:
         """
         search = tmdb.Search()
         results = []
-        max_results = kwargs['max_results']
+        max_results = int(kwargs['max_results'])
         movie_response = search.movie(query=kwargs['query'],
                                     language = kwargs['language'],
                                     include_adult = kwargs['include_adult'],
@@ -128,7 +128,7 @@ class TmdbApiManager:
         return result
 
     @staticmethod
-    def get_top_rated(max_results: int=None) -> List:
+    def get_top_rated(**kwargs) -> List:
         """
         Optional Args:
         language: (optional) ISO 639-1 code.
@@ -140,7 +140,6 @@ class TmdbApiManager:
             returns all matching results by default
             --> `/top-rated/20` will return first 20
         """
-        max_results = kwargs['max_results']
         movies = tmdb.Movies()
         results = []
         max_results = kwargs['max_results']
@@ -156,7 +155,7 @@ class TmdbApiManager:
         return results
 
     @staticmethod
-    def get_upcoming(max_results: int=None) -> List:
+    def get_upcoming(**kwargs) -> List:
         """
         Args:
         language: (optional) ISO 639-1 code.
