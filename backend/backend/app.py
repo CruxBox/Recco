@@ -60,6 +60,7 @@ class TmdbApiManager:
         search = tmdb.Search()
         results = []
         max_results = int(kwargs['max_results'])
+
         movie_response = search.movie(query=kwargs['query'],
                                     language = kwargs['language'],
                                     include_adult = kwargs['include_adult'],
@@ -99,7 +100,8 @@ class TmdbApiManager:
 
         movies = tmdb.Movies()
         results = []
-        max_results = kwargs['max_results']
+        max_results = int(kwargs['max_results'])
+
         response = movies.popular(language = kwargs['language'],
                                 region = kwargs['region'])
         for page in range(1, response['total_pages']+1):
@@ -115,16 +117,14 @@ class TmdbApiManager:
         return results
 
     @staticmethod
-    def get_latest_movies() -> List:
+    def get_latest_movie(**kwargs) -> List:
         """
         Args:
             language: (optional) ISO 639-1 code.
         Returns latest movies.
         """
-
         movies = tmdb.Movies()
-        result = [movies.latest(language = kwargs['language'])]
-
+        result = movies.latest(language = kwargs['language'])
         return result
 
     @staticmethod
@@ -142,7 +142,8 @@ class TmdbApiManager:
         """
         movies = tmdb.Movies()
         results = []
-        max_results = kwargs['max_results']
+        max_results = int(kwargs['max_results'])
+
         response = movies.top_rated(language = kwargs['language'],
                                 region = kwargs['region'])
         for page in range(1, response['total_pages']+1):
@@ -170,7 +171,8 @@ class TmdbApiManager:
 
         movies = tmdb.Movies()
         results = []
-        max_results = kwargs['max_results']
+        max_results = int(kwargs['max_results'])
+
         response = movies.upcoming(language = kwargs['language'],
                                 region = kwargs['region'])
         for page in range(1, response['total_pages']+1):
@@ -181,7 +183,6 @@ class TmdbApiManager:
                 break
 
         return results
-
 
 class IncomingApiManager(TmdbApiManager):
     pass
