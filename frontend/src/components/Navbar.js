@@ -1,6 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Navbar.css';
 function Navbar() {
+
+  localStorage.setItem('rememberMe', JSON.stringify({hello:"hi"}));
   return (
     <div className="Navbar">
       <header>
@@ -17,13 +20,13 @@ function Navbar() {
           </button>
         </div>
       </div>
+      &nbsp;
             <div className="navbar">
               <ul>
-                <li><a href="home" className="active">Home</a></li>
-                <li><a href="trending">Trending</a></li>
-                <li><a href="upcoming">Upcoming</a></li>
-                <li><a href="watchlist">My Watchlist</a></li>
-                <li><a href="login">Login/Signup</a></li>
+                <li><Link to="/">Home</Link></li>
+                <li><Link to="/upcoming">Upcoming</Link></li>
+                <li><Link to="/watchlist">My Watchlist</Link></li>
+                <li><Link to="/login">Login/Signup</Link></li>
               </ul>
             </div>
           </div>
