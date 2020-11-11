@@ -1,9 +1,25 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 function Navbar() {
-
-  localStorage.setItem('rememberMe', JSON.stringify({hello:"hi"}));
+  const [name, setName] = useState("");
+ function handleSubmit(event) {
+  event.preventDefault();
+  var axios = require('axios');
+  var config = {
+    method: 'get',
+    url: `http://127.0.0.1:8000/movies/search/?query=${name}&language=en&max_results=10`,
+    headers: { }
+  };
+  axios(config)
+  .then(function (response) {
+    console.log(JSON.stringify(response.data));
+    setName("");
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+  } 
   return (
     <div className="Navbar">
       <header>
@@ -13,12 +29,15 @@ function Navbar() {
               <a href className="logo">Recco</a>
             </div>
       <div className="wrap">
-        <div className="search">
-          <input type="text" className="searchTerm" placeholder="What are you looking for?" />
+        <form onSubmit={handleSubmit}>
+        <div className="search">     
+          <input type="text" value ={name} onChange={e => setName(e.target.value)} className="searchTerm" placeholder="What are you looking for?" />
           <button type="submit" className="searchButton">
             <i className="fa fa-search" />
           </button>
+          
         </div>
+        </form>
       </div>
       &nbsp;
             <div className="navbar">
