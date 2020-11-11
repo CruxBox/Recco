@@ -1,7 +1,8 @@
 
 footer{
-	padding: 45px 15px;
+	padding: 25px 15px;
 	background-color: black;
+	font-family:'Poppins',sans-serif; 
 }
 footer .logo{
 	flex: 0 0 100%;

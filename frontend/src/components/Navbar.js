@@ -21,6 +21,7 @@ function Navbar() {
               <ul>
                 <li><a href="home" className="active">Home</a></li>
                 <li><a href="trending">Trending</a></li>
+                <li><a href="upcoming">Upcoming</a></li>
                 <li><a href="watchlist">My Watchlist</a></li>
                 <li><a href="login">Login/Signup</a></li>
               </ul>
