@@ -30,13 +30,17 @@
       .form-group {
         display: flex;
         flex-direction: column;
+        
         align-items: flex-start;
         width: fit-content;
+        .footer{
+          align-items: center;
+        }
         label {
           font-size: 20px;
         }
         input {
-          margin-top: 6px;
+          margin-top: 3px;
           min-width: 18em;
           height: 37px;
           padding: 0px 10px;
@@ -45,7 +49,7 @@
           background-color: #f3f3f3;
           border: 0;
           border-radius: 4px;
-          margin-bottom: 31px;
+          margin-bottom: 7px;
           transition: all 250ms ease-in-out;
           &:hover {
             //background-color: #ffffff;

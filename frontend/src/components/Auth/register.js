@@ -92,12 +92,13 @@ export const Register = (props) => {
                 name="password"
                 placeholder="password"
               />
-              <div className="footer">
+              
+            </div>
+            <div className="footer" >
                 <button type="submit" className="btn">
                   Register
                 </button>
               </div>
-            </div>
           </div>
         </form>
       </div>
