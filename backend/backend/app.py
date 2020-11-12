@@ -78,11 +78,19 @@ class TmdbApiManager:
                             primary_release_year = kwargs['primary_release_year'],
                             page=kwargs['page'])['results']
                 )
-            if max_results and len(results) > max_results:
+            if max_results and len(results) > max_results:               
                 results = results[:max_results]
                 break
 
         return results
+
+    @staticmethod
+    def get_movie_details(tmdb_id:int):
+        """
+        Returns more details about the movie
+        """
+        movie = tmdb.Movies(tmdb_id).info()
+        return movie
 
     @staticmethod
     def get_popular_movies(**kwargs) -> List:

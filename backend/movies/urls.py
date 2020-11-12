@@ -11,6 +11,7 @@ urlpatterns = [
     path('top-rated/', get_top_rated, name='top_rated_movies'),
     path('upcoming/', get_upcoming, name='upcoming_movies'),
     path('comments/', get_all_comments, name = 'all_comments'),
+    path('<int:movie_id>/', get_movie_details, name = 'movie_details'),
     path('<int:movie_id>/comments', get_or_post_comment, name='get_or_post_comment'),
     path('comments/<int:comment_id>', get_comment_by_id, name='get_comment_by_id'),
     path('comments/edit/<int:comment_id>', edit_comment, name = 'edit_comment'),

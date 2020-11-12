@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import './Navbar.css';
 function Navbar() {
@@ -27,11 +27,12 @@ function Navbar() {
   } 
 
 var loginButton;
+console.log(localStorage.getItem("data"))
 if (localStorage.getItem("data")) {
-  loginButton ="login/Signup";
+  loginButton ="Logout";
 } 
 else {
-  loginButton ="Logout";
+  loginButton ="Login/Signup";
 }
   return (
     <div className="Navbar">

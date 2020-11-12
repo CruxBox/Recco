@@ -83,6 +83,12 @@ def get_upcoming(request):
 	data = ApiM.get_upcoming(**kwargs)
 	return Response(data)
 
+@api_view(('GET',))
+@permission_classes((AllowAny,))
+def get_movie_details(request,movie_id):
+	data = ApiM.get_movie_details(movie_id)
+	return Response(data)
+
 
 def get_max_results(**kwargs):
     if('max_results' not in kwargs.keys()):

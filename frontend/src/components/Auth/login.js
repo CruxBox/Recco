@@ -37,6 +37,8 @@ export const Login = (props) => {
           draggable: true,
           progress: undefined,
           });
+          setUsername("");
+          setPassword("")
         
       })
       .catch(function (error) {

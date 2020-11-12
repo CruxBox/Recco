@@ -39,9 +39,12 @@ export const Register = (props) => {
           draggable: true,
           progress: undefined,
           });
+          setUsername("");
+          setPassword("");
+          setEmail("");
       })
       .catch(function (error) {
-        console.log(error);
+        console.log(error.data);
         toast.error('Server Error', {
           position: "bottom-right",
           autoClose: 2000,
