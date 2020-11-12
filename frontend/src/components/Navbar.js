@@ -25,6 +25,14 @@ function Navbar() {
     console.log(error);
   });
   } 
+
+var loginButton;
+if (localStorage.getItem("data")) {
+  loginButton ="login/Signup";
+} 
+else {
+  loginButton ="Logout";
+}
   return (
     <div className="Navbar">
       <header>
@@ -50,7 +58,7 @@ function Navbar() {
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/upcoming">Upcoming</Link></li>
                 <li><Link to="/watchlist">My Watchlist</Link></li>
-                <li><Link to="/login">Login/Signup</Link></li>
+                <li><Link to="/login">{loginButton}</Link></li>
               </ul>
             </div>
           </div>
