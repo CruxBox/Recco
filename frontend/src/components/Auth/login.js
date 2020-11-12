@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import { toast } from 'react-toastify';
 import loginImg from "../../login.svg";
 
 export const Login = (props) => {
@@ -28,9 +28,28 @@ export const Login = (props) => {
       .then(function (response) {
         console.log(JSON.stringify(response.data));
         localStorage.setItem("user",JSON.stringify(response.data))
+        toast.success('Logged in Succesfully', {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
+        
       })
       .catch(function (error) {
         console.log(error);
+        toast.error('Server Error', {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
       });
   }
 

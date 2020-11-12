@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import loginImg from "../../login.svg";
+import { toast } from "react-toastify";
 
 export const Register = (props) => {
   const [username, setUsername] = useState("");
@@ -13,7 +14,7 @@ export const Register = (props) => {
     var data = {
       username: username,
       password: password,
-      email:email
+      email: email,
     };
     data = JSON.stringify(data);
     var config = {
@@ -29,9 +30,27 @@ export const Register = (props) => {
       .then(function (response) {
         console.log(JSON.stringify(response.data));
         localStorage.setItem("user", JSON.stringify(response.data));
+        toast.success('Registered Successfully', {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
       })
       .catch(function (error) {
         console.log(error);
+        toast.error('Server Error', {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
       });
   }
 
@@ -73,13 +92,13 @@ export const Register = (props) => {
                 name="password"
                 placeholder="password"
               />
+              <div className="footer">
+                <button type="submit" className="btn">
+                  Register
+                </button>
+              </div>
             </div>
           </div>
-          <div className="footer">
-        <button type="submit" className="btn">
-          Register
-        </button>
-      </div>
         </form>
       </div>
     </div>

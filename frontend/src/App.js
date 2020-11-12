@@ -5,6 +5,9 @@ import Signup from './components/Signup';
 import Home from './components/Home';
 import MovieCard from './components/MovieCard';
 import {BrowserRouter as Router,Switch,Route} from 'react-router-dom'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function App() {
   return (
     <Router>
@@ -15,6 +18,7 @@ function App() {
           <Route path="/home" component={Home} />
           <Route path="/login" component={Signup} />
         </Switch>
+        <ToastContainer />
         <Footer />
       </div>
     </Router>
