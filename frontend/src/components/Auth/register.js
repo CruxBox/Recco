@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import loginImg from "../../login.svg";
+import { Link, useHistory } from 'react-router-dom';
 import { toast } from "react-toastify";
 
 export const Register = (props) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const history = useHistory({});
   function handleSubmit(event) {
     event.preventDefault();
     //const data = new FormData(event.target);
@@ -25,7 +26,6 @@ export const Register = (props) => {
       },
       data: data,
     };
-
     axios(config)
       .then(function (response) {
         console.log(JSON.stringify(response.data));
@@ -42,6 +42,9 @@ export const Register = (props) => {
           setUsername("");
           setPassword("");
           setEmail("");
+          history.push({
+            pathname: '/home'
+      })
       })
       .catch(function (error) {
         console.log(error.data);

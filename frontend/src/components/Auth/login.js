@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, useHistory } from 'react-router-dom';
 import axios from "axios";
 import { toast } from 'react-toastify';
 import loginImg from "../../login.svg";
@@ -6,6 +7,7 @@ import loginImg from "../../login.svg";
 export const Login = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const history = useHistory({});
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -39,6 +41,9 @@ export const Login = (props) => {
           });
           setUsername("");
           setPassword("")
+          history.push({
+         pathname: '/home'
+      })
         
       })
       .catch(function (error) {
