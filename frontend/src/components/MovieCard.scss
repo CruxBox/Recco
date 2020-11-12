@@ -133,6 +133,7 @@ html, body{
     margin: 70px auto; 
     min-height: 350px;
     height: auto;
+
   }
   
   .blur_back{
@@ -156,6 +157,12 @@ html, body{
 }
 
 
+#ave{
+  box-shadow: 0px 0px 45px -35px black;
+  &:hover{
+    box-shadow: 0px 0px 120px -55px black;
+  }
+}
 
 
 
