@@ -188,7 +188,7 @@ def get_comment_by_id(request, comment_id):
 	return Response(serializer.data)
 
 
-@api_view(('POST',))
+@api_view(('PUT',))
 @permission_classes((AllowAny,))
 def upvote_comment(request, comment_id):
 	try:
