@@ -1,9 +1,13 @@
 import json
 
+
+from django.utils.formats import get_format
+from datetime import datetime
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+
 
 from .models import *
 from .serializers import *
@@ -89,35 +93,84 @@ def get_max_results(**kwargs):
 
 @api_view(('GET',))
 @permission_classes((AllowAny,))
-def get_all_comments_by_id(request):
-	"""
-	Incoming args: movie id
-	"""
-	id = kwargs['tmdb_id']
-	comments = Comment.objects.filter(tmdb_id = id)
-	serializer = CommentSerializer(comments, many = True)
-	return Response(serializer.data)
-
-
-@api_view(('GET',))
-@permission_classes((AllowAny,))
 def get_all_comments(request):
 	comments = Comment.objects.all()
 	serializer = CommentSerializer(comments, many = True)
 	return Response(serializer.data)
 
 
-@api_view(('POST',))
+@api_view(('PUT',))
 @permission_classes((AllowAny,))
-def post_comment(request):
+def edit_comment(request, comment_id):
 	"""
-	Info for generating movie instance should come from the frontend.
-	That is, [id, imdb_id, vote_average, vote_count, popularity]
+	Incoming args: movie id
 	"""
-	serializer = CommentSerializer(data = request.DATA)
-	if serializer.is_valid():
-		# TODO://Generate the movie instance here.
-		# Do we do request.DATA['someKey'] to get the data?
-		serializer.save()
-		return Response(serializer.data, status = status.HTTP_201_CREATED)
+	try:
+		comment = Comment.objects.get(pk = comment_id)
+	except Comment.DoesNotExist:
+		return Response(status = status.HTTP_404_NOT_FOUND)
+
+	if request.method == "PUT":
+		serializer = CommentSerializer(comment, data = request.data)
+		data = {}
+		if(serializer.is_valid()):
+			serializer.save()
+			data['success'] = 'update successful'
+			return Response(data = data)
 	return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(('DELETE',))
+@permission_classes((AllowAny,))
+def delete_comment(request, comment_id):
+	"""
+	Incoming args: comment_id
+	"""
+	try:
+		comment = Comment.objects.filter(pk = comment_id)
+	except Comment.DoesNotExist:
+		return Response(status = status.HTTP_404_NOT_FOUND)
+
+	if request.method == "DELETE":
+		stat = comment.delete()
+		data = {}
+		if(stat):
+			data['success'] = 'update successful'
+		else:
+			data['failure'] = 'delete failed'
+		return Response(data = data)
+
+
+@api_view(('POST','GET',))
+@permission_classes((AllowAny,))
+def get_or_post_comment(request, movie_id):
+	"""
+	Info for generating movie instance should come from the frontend if request is POST
+	That is, [tmdb_id]
+	"""
+	if request.method == 'POST':
+		data = request.data
+		try:
+			movie = Movie.objects.get(tmdb_id = movie_id)
+			print(movie)
+		except Movie.DoesNotExist:
+			movie = Movie.objects.create(tmdb_id = movie_id)
+			movie.save()
+			#call a view to fill the movie data. TODO://
+
+		comment = Comment.objects.create(content = data['content'], movie = movie)
+		if comment:
+			return Response({'success':'successfully posted'}, status = status.HTTP_201_CREATED)
+		else:
+			return Response({'failure':'failed to create comment'}, status = status.HTTP_400_BAD_REQUEST)
+	else:
+		"""
+		Incoming args: movie id
+		"""
+		try:
+			comments = Comment.objects.filter(movie__tmdb_id = movie_id)
+		except Comment.DoesNotExist:
+			return Response(status = status.HTTP_404_NOT_FOUND)
+
+		serializer = CommentSerializer(comments, many = True)
+		return Response(serializer.data)

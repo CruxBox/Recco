@@ -3,13 +3,13 @@ from rest_framework import serializers
 from .models import *
 
 
-class MoviesSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Movie
-		fields = ['__all__']
-
-
 class CommentSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Comment
-		fields = ['__all__']
+		fields = ['content', 'created']
+
+class MoviesSerializer(serializers.ModelSerializer):
+	comments = CommentSerializer(many = True)
+	class Meta:
+		model = Movie
+		fields = ['__all__', 'comments']
