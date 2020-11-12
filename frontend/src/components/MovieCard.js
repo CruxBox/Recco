@@ -18,8 +18,7 @@ function MovieCard( data ) {
              <h1>{card.title}</h1>
     <h4>{card.release_date} Popularity {card.popularity}%</h4>
                 <span className="minutes">{card.duration}</span>
-              <p className="type">{card.genre_ids}, {card.genre},{card.genre}</p><br/>
-              <p className="type">{card.original_language}</p>
+              <p className="type">Language : {card.original_language}</p>
             </div>
             <div className="movie_desc">
               <p className="text">
