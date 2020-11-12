@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import './Navbar.css';
 function Navbar() {
   const [name, setName] = useState("");
+  const history = useHistory({});
  function handleSubmit(event) {
   event.preventDefault();
   var axios = require('axios');
@@ -15,6 +16,10 @@ function Navbar() {
   .then(function (response) {
     console.log(JSON.stringify(response.data));
     setName("");
+    history.push({
+      pathname: '/list',
+      state: { data: response.data }
+})
   })
   .catch(function (error) {
     console.log(error);
