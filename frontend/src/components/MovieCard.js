@@ -41,11 +41,10 @@ function MovieCard( data ) {
             <div className="movie_header">
               <img className="locandina" src={`${base_url}${movie.poster_path}`} alt={movie.title}/>
              <h1><a href={movie.homepage} target="_blank">{movie.title}</a></h1>
-    <h4>{movie.tagline}</h4>
-    <h4>{movie.release_date} Popularity {movie.popularity}%</h4>               
+    <h3>{movie.tagline}</h3>
+    <h4>{movie.release_date}, Popularity {movie.popularity}%</h4>               
      <span className="minutes">{movie.runtime} min</span>              
               <p className="type">Language : {movie.original_language}</p><br />
-              <h4 className="type">{movie.genres.map((genre) => { return `${genre.name} ` })}</h4><br/>
 
             </div>
             <br />
