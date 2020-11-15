@@ -1,7 +1,10 @@
 from typing import List
+import justwatch
 
 import tmdbsimple as tmdb
 
+
+justwatch.justwatchapi.HEADER = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 tmdb.API_KEY = '6d343765c641930b74aae2d4a89c22f8'
 
 class TmdbApiManager:
@@ -184,5 +187,33 @@ class TmdbApiManager:
 
         return results
 
-class IncomingApiManager(TmdbApiManager):
+
+class JustWatchApiManager:
+    """
+    Args:
+    "query": -- null or title as string
+    """
+    @staticmethod
+    def search_response_with_tmdb_id(**kwargs):
+        """
+        Returns the response with the exact tmdb_id
+        Parameters of function: Query(movie or show name),
+        Tmdb_id(the one that is needed)
+        """
+        just_watch = justwatch.JustWatch()
+        results = just_watch.search_for_item(
+                    query = kwargs['query'])
+
+        for i in range(results['total_results']):
+            temp2 = len(results['items'][i]['scoring'])
+            temp = results['items'][i]['scoring']
+            for j in range(temp2):
+                if temp[j]['provider_type'] == "tmdb:id":
+                    if temp[j]['value'] == int(kwargs['tmdb_id']):
+                        return results['items'][i]
+
+        return {'failed': 'not found'}
+
+
+class IncomingApiManager(TmdbApiManager, JustWatchApiManager):
     pass
