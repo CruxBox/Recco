@@ -224,3 +224,15 @@ def downvote_comment(request, comment_id):
 		return Response({'success':'successfully downvoted'})
 	else:
 		return Response({'failure':'failed to downvote'}, status = status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(('GET',))
+@permission_classes((AllowAny,))
+def search_response_with_tmdb_id(request):
+	kwargs = dict()
+	args = ['query', 'tmdb_id']
+	for arg in args:
+		kwargs[arg] = request.query_params.get(arg, None)
+
+	data = ApiM.search_response_with_tmdb_id(**kwargs)
+	return Response(data)
