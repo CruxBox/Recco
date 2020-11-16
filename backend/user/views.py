@@ -46,7 +46,7 @@ def login(request):
     }, status=status.HTTP_201_CREATED)
 
 @csrf_exempt
-@api_view(('POST',))
+@api_view(('DELETE',))
 @authentication_classes((TokenAuthentication, ))
 def logout(request):
     Token.objects.get(user=request.user).delete()
