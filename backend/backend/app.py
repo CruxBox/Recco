@@ -4,8 +4,10 @@ import justwatch
 import tmdbsimple as tmdb
 
 
-justwatch.justwatchapi.HEADER = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+justwatch.justwatchapi.HEADER = {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 tmdb.API_KEY = '6d343765c641930b74aae2d4a89c22f8'
+
 
 class TmdbApiManager:
     """
@@ -31,8 +33,8 @@ class TmdbApiManager:
         for page in range(1, tv_response['total_pages']+1):
             results.extend(search.tv(query=query, page=page)['results'])
             if max_results and len(results) > max_results:
-                    results = results[:max_results]
-                    break
+                results = results[:max_results]
+                break
 
         return results
 
@@ -65,23 +67,23 @@ class TmdbApiManager:
         max_results = int(kwargs['max_results'])
 
         movie_response = search.movie(query=kwargs['query'],
-                                    language = kwargs['language'],
-                                    include_adult = kwargs['include_adult'],
-                                    region = kwargs['region'],
-                                    year = kwargs['year'],
-                                    primary_release_year = kwargs['primary_release_year'])
+                                      language=kwargs['language'],
+                                      include_adult=kwargs['include_adult'],
+                                      region=kwargs['region'],
+                                      year=kwargs['year'],
+                                      primary_release_year=kwargs['primary_release_year'])
 
         for page in range(1, movie_response['total_pages']+1):
             results.extend(
                 search.movie(query=kwargs['query'],
-                            language = kwargs['language'],
-                            include_adult = kwargs['include_adult'],
-                            region = kwargs['region'],
-                            year = kwargs['year'],
-                            primary_release_year = kwargs['primary_release_year'],
-                            page=kwargs['page'])['results']
-                )
-            if max_results and len(results) > max_results:               
+                             language=kwargs['language'],
+                             include_adult=kwargs['include_adult'],
+                             region=kwargs['region'],
+                             year=kwargs['year'],
+                             primary_release_year=kwargs['primary_release_year'],
+                             page=kwargs['page'])['results']
+            )
+            if max_results and len(results) > max_results:
                 results = results[:max_results]
                 break
 
@@ -105,14 +107,14 @@ class TmdbApiManager:
         results = []
         max_results = int(kwargs['max_results'])
 
-        response = movies.popular(language = kwargs['language'],
-                                region = kwargs['region'])
+        response = movies.popular(language=kwargs['language'],
+                                  region=kwargs['region'])
         for page in range(1, response['total_pages']+1):
             results.extend(
-                movies.popular(language = kwargs['language'],
-                                region = kwargs['region'],
-                                page=page)['results']
-                )
+                movies.popular(language=kwargs['language'],
+                               region=kwargs['region'],
+                               page=page)['results']
+            )
             if max_results and len(results) > max_results:
                 results = results[:max_results]
                 break
@@ -127,7 +129,7 @@ class TmdbApiManager:
         Returns latest movies.
         """
         movies = tmdb.Movies()
-        result = movies.latest(language = kwargs['language'])
+        result = movies.latest(language=kwargs['language'])
         return result
 
     @staticmethod
@@ -147,11 +149,11 @@ class TmdbApiManager:
         results = []
         max_results = int(kwargs['max_results'])
 
-        response = movies.top_rated(language = kwargs['language'],
-                                region = kwargs['region'])
+        response = movies.top_rated(language=kwargs['language'],
+                                    region=kwargs['region'])
         for page in range(1, response['total_pages']+1):
-            results.extend(movies.top_rated(language = kwargs['language'],
-                                region = kwargs['region'], page=page)['results'])
+            results.extend(movies.top_rated(language=kwargs['language'],
+                                            region=kwargs['region'], page=page)['results'])
             if max_results and len(results) > max_results:
                 results = results[:max_results]
                 break
@@ -176,11 +178,11 @@ class TmdbApiManager:
         results = []
         max_results = int(kwargs['max_results'])
 
-        response = movies.upcoming(language = kwargs['language'],
-                                region = kwargs['region'])
+        response = movies.upcoming(language=kwargs['language'],
+                                   region=kwargs['region'])
         for page in range(1, response['total_pages']+1):
-            results.extend(movies.upcoming(language = kwargs['language'],
-                                region = kwargs['region'], page=page)['results'])
+            results.extend(movies.upcoming(language=kwargs['language'],
+                                           region=kwargs['region'], page=page)['results'])
             if max_results and len(results) > max_results:
                 results = results[:max_results]
                 break
@@ -189,12 +191,8 @@ class TmdbApiManager:
 
 
 class JustWatchApiManager:
-    """
-    Args:
-    "query": -- null or title as string
-    """
     @staticmethod
-    def search_response_with_tmdb_id(country="IN",**kwargs):
+    def search_response_with_tmdb_id(country="IN", **kwargs):
         """
         Returns the response with the exact tmdb_id
         Parameters of function: Query(movie or show name),
@@ -203,8 +201,7 @@ class JustWatchApiManager:
         """
         just_watch = justwatch.JustWatch(country)
         results = just_watch.search_for_item(
-                    query = kwargs['query'])
-
+            query=kwargs['query'])
         for i in range(results['total_results']):
             temp2 = len(results['items'][i]['scoring'])
             temp = results['items'][i]['scoring']
@@ -217,14 +214,15 @@ class JustWatchApiManager:
 
 
 class IncomingApiManager(TmdbApiManager, JustWatchApiManager):
-    
     @staticmethod
-
-    def get_movie_details(tmdb_id:int):
+    def get_movie_details(tmdb_id: int):
         """
+        Args:
+        "tmdb_id": -- tmdb_id of the movie
         Returns more details about the movie
         """
         movie = tmdb.Movies(tmdb_id).info()
-        meta_data = IncomingApiManager.search_response_with_tmdb_id(query=movie['title'],tmdb_id=movie['id'])
+        meta_data = IncomingApiManager.search_response_with_tmdb_id(
+            query=movie['title'], tmdb_id=movie['id'])
         movie['meta_data'] = meta_data
         return movie

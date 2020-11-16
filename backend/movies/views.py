@@ -86,8 +86,15 @@ def get_upcoming(request):
 @api_view(('GET',))
 @permission_classes((AllowAny,))
 def get_movie_details(request,movie_id):
+	try:
+		movie = Movie.objects.get(tmdb_id = movie_id)
+		status_ = status.HTTP_200_OK
+	except Movie.DoesNotExist:
+		movie = Movie.objects.create(tmdb_id = movie_id)
+		movie.save()	
+		status_ = status.HTTP_201_CREATED
 	data = ApiM.get_movie_details(movie_id)
-	return Response(data)
+	return Response(data,status=status_)
 
 
 def get_max_results(**kwargs):
