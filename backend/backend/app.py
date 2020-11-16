@@ -88,14 +88,6 @@ class TmdbApiManager:
         return results
 
     @staticmethod
-    def get_movie_details(tmdb_id:int):
-        """
-        Returns more details about the movie
-        """
-        movie = tmdb.Movies(tmdb_id).info()
-        return movie
-
-    @staticmethod
     def get_popular_movies(**kwargs) -> List:
         """
         Returns popular movies.
@@ -202,13 +194,14 @@ class JustWatchApiManager:
     "query": -- null or title as string
     """
     @staticmethod
-    def search_response_with_tmdb_id(**kwargs):
+    def search_response_with_tmdb_id(country="IN",**kwargs):
         """
         Returns the response with the exact tmdb_id
         Parameters of function: Query(movie or show name),
+        Country(the region fo which it fetches the sources from),
         Tmdb_id(the one that is needed)
         """
-        just_watch = justwatch.JustWatch()
+        just_watch = justwatch.JustWatch(country)
         results = just_watch.search_for_item(
                     query = kwargs['query'])
 
@@ -224,4 +217,14 @@ class JustWatchApiManager:
 
 
 class IncomingApiManager(TmdbApiManager, JustWatchApiManager):
-    pass
+    
+    @staticmethod
+
+    def get_movie_details(tmdb_id:int):
+        """
+        Returns more details about the movie
+        """
+        movie = tmdb.Movies(tmdb_id).info()
+        meta_data = IncomingApiManager.search_response_with_tmdb_id(query=movie['title'],tmdb_id=movie['id'])
+        movie['meta_data'] = meta_data
+        return movie
