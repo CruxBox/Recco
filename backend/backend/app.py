@@ -203,13 +203,15 @@ class JustWatchApiManager:
         results = just_watch.search_for_item(
             query=kwargs['query'])
         for i in range(results['total_results']):
-            temp2 = len(results['items'][i]['scoring'])
-            temp = results['items'][i]['scoring']
-            for j in range(temp2):
-                if temp[j]['provider_type'] == "tmdb:id":
-                    if temp[j]['value'] == int(kwargs['tmdb_id']):
-                        return results['items'][i]
-
+            try:
+                temp2 = len(results['items'][i]['scoring'])
+                temp = results['items'][i]['scoring']
+                for j in range(temp2):
+                    if temp[j]['provider_type'] == "tmdb:id":
+                        if temp[j]['value'] == int(kwargs['tmdb_id']):
+                            return results['items'][i]
+            except:
+                pass
         return {'failed': 'not found'}
 
 
