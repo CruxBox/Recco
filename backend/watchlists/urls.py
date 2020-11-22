@@ -9,4 +9,6 @@ urlpatterns = [
     path('<int:id>/', get_watchlist_details, name='get_watchlist_details'),
     path('<int:id>/add',add_to_watchlist , name='add_to_watchlist'),
     path('<int:id>/remove',remove_from_watchlist,name='remove_from_watchlist'),
+    path('<int:id>/share/add',share_watchlist,name='share_watchlist'),
+    path('<int:id>/share/remove',unshare_watchlist,name='unshare_watchlist'),
 ]
