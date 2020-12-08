@@ -12,4 +12,4 @@ class Watchlist(models.Model):
     movies = models.ManyToManyField("movies.Movie")
 
     def __str__(self):
-        return self.name
+        return self.name+'_'+self.owner.username

@@ -20,8 +20,8 @@ from .serializers import *
 def get_watchlists(request):
     if request.method == "GET":
         user = request.user
-        owned_watchlists = user.watchlists.all()
-        shared_watchlists = user.shared_watchlists.all()
+        owned_watchlists = user.get_owned_watchlists()
+        shared_watchlists = user.get_shared_watchlists()
         response = dict()
         response['owned'] = WatchlistsSerializer(
             owned_watchlists, many=True).data
@@ -44,7 +44,7 @@ def get_watchlist_details(request, id):
     if request.method == "GET":
         try:
             response = WatchlistsSerializer(watchlist)
-            if request.user != watchlist.owner or request.user in watchlist.shared_with.all():
+            if request.user != watchlist.owner or request.user not in watchlist.shared_with.all():
                 return Response({'details': 'You do not have the permission'}, status=status.HTTP_401_UNAUTHORIZED)
             return Response(response.data, status=status.HTTP_200_OK)
         except Exception as e:
@@ -132,7 +132,7 @@ def unshare_watchlist(request, id):
     else:
         data = request.data
         if 'users' not in data:
-            return Response({'details': 'You do not have the permission'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'error': 'You do not have the permission'}, status=status.HTTP_401_UNAUTHORIZED)
         users = User.objects.filter(id__in=data['users'])
         watchlist.shared_with.remove(*list(users))
         response = WatchlistsSerializer(watchlist)
