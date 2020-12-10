@@ -25,7 +25,7 @@ SECRET_KEY = 'r(qev9ef4!$&5-gp5w1ihetu-xj&if3p=1j0ohq36%_%-@t5#3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0','localhost']
 
 
 # Application definition
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'user',
     'movies',
+    'watchlists',
 ]
 
 MIDDLEWARE = [
@@ -138,3 +139,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # we whitelist localhost:3000 because that's where frontend will be served
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = (
+    'http://127.0.0.1:3000',
+    'http://localhost:3000'
+)
