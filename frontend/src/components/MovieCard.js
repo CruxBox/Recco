@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
 import './MovieCard.scss';
+import { useHistory } from 'react-router-dom';
 import axios from "axios";
 
 const base_url = "https://image.tmdb.org/t/p/original";
 
 function MovieCard( data ) {
-  const [movie, setMovie] = useState("")
+  const [movie, setMovie] = useState("");
+  const history = useHistory();
   useEffect(() => {
     var id = data.data.id;
     function get_movie_details(id) {
       var config = {
         method: 'get',
-        url: `http://127.0.0.1:8000/movies/${id}`,
+        url: `http://127.0.0.1:8000/movies/${id}/`,
         headers: { 
           'Content-Type': 'application/json'
         },
@@ -29,13 +31,14 @@ function MovieCard( data ) {
     
   }, []);
 
+
   function truncate (str,n)
         {
                 return str?.length > n ? str.substr(0,n-1) + "..." : str;
         }
         console.log(movie.genres)
     return (
-    <div className="MovieCard">
+    <div className="MovieCard" onClick={() => history.push(`/movie/${data.data.id}`) }>
         <div className="movie_card" id="ave">
           <div className="info_section">
             <div className="movie_header">

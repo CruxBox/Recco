@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from "react";
 import axios from "./axios";
 import requests from './requests';
+import { useHistory } from 'react-router-dom';
 import "./Row.css";
 // import Youtube from "react-youtube";
 // import movieTrailer from "movie-trailer";
@@ -9,6 +10,7 @@ const base_url = "https://image.tmdb.org/t/p/original/";
 
 function Row({title,fetchUrl,isLargeRow}){
         const [movies,setMOvies] = useState([]);
+        const history = useHistory();
         // const [trailerUrl,setTrailerUrl] = useState("");
         //A snippet of code which runs based on our condition//
         useEffect(()=> {
@@ -56,7 +58,7 @@ function Row({title,fetchUrl,isLargeRow}){
                                 {movies.map((movie) => (
                                         <img
                                          key={movie.id}
-                                        //  onClick={() => handleClick(movie)}
+                                         onClick={() => history.push(`/movie/${movie.id}`)} 
                                          className={`row_poster ${isLargeRow && "row_posterLarge"}`}
                                          src={`${base_url}${
                                                  isLargeRow ? movie.poster_path : movie.backdrop_path

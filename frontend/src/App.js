@@ -19,7 +19,7 @@ function App() {
           <Route path="/home" component={Home} />
           <Route path="/login" component={Signup} />
           <Route path="/list" component={Movielist}/>
-          <Route path="/m" component={MoviePage}/>
+          <Route path="/movie/:movieId" component={MoviePage}/>
         </Switch>
         <ToastContainer />
         <Footer />
