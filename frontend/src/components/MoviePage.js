@@ -196,6 +196,10 @@ function MoviePage() {
                   <i className="book1" />
                   ADD TO WATCHLIST
                 </a>
+                <a className="book" onClick={add_to_seen}>
+                  <i className="book2" />
+                  ADD TO SEENLIST
+                </a>
               </div>
               <div className="fade"></div>
             </div>

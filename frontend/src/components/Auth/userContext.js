@@ -19,11 +19,12 @@ export const  UserProvider = ({ children }) => {
     // Logout updates the user data to default
     const logout = (user) => {
       var info=JSON.parse(localStorage.getItem("user"))
+     
       var config = {
         method: 'delete',
         url: 'http://127.0.0.1:8000/users/token-auth/logout',
         headers: { 
-          'Authorization': `Token ${info.token}`
+          'Authorization': `Token`
         },
       };
       axios(config)
