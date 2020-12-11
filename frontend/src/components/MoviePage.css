@@ -319,6 +319,9 @@ i.video1 {
 	
 
 }
+.stream a{
+  color:  rgb(219, 210, 210);
+}
 .stream ul { 
 	padding: 14px 0px 14px 0px;
   column-count: 2;
@@ -330,8 +333,8 @@ i.video1 {
 
 }
 .stream ul li a{
-	color: white;
-	font-size: 1.5em;
+	color: rgb(216, 209, 209);
+	font-size: 1.3em;
 }
 .stream h1{
 	color:#fff;
@@ -340,7 +343,7 @@ i.video1 {
 	margin-bottom:12px;
 	padding-bottom:7px;
 	border-bottom:1px solid #4b4b4b;
-	padding-top: 20px;
+	padding-top: 30px;
 }
 
 
@@ -350,7 +353,7 @@ i.video1 {
 a.imdb {
   font-size: 1.25em;
   text-decoration: none;
-  color: white;
+  
   font-weight: 600;
   
   width:75%;
@@ -367,7 +370,6 @@ i.imdb1 {
 a.rot {
   font-size: 1.25em;
   text-decoration: none;
-  color: white;
   font-weight: 600;
   
   width:75%;
@@ -386,7 +388,6 @@ i.rot1 {
 a.tmdb {
   font-size: 1.25em;
   text-decoration: none;
-  color: white;
   font-weight: 600;
   
   width:75%;

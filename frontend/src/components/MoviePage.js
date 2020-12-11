@@ -175,6 +175,9 @@ function MoviePage() {
                   {movie.title}
                 </h1>
                 <h3>{movie.tagline}</h3>
+                {!movie.adult && <p class="age"><a href="#">U/A</a> Lang : {movie.original_language}</p>}
+                {movie.adult && <p class="age1"><a href="#">18+</a> Lang : {movie.original_language}</p>}
+                
                 <p className="review">
                   Runtime &nbsp;&nbsp;&nbsp;: &nbsp;&nbsp; {movie.runtime} min
                 </p>
@@ -187,7 +190,7 @@ function MoviePage() {
                   Release &nbsp;&nbsp;&nbsp;&nbsp;: &nbsp;&nbsp;{" "}
                   {movie.release_date}
                 </p>
-                <p className="special">{truncate(movie?.overview, 400)}</p>
+                <p className="special">{truncate(movie?.overview, 180)}</p>
                 <a className="video" href={movie?.youtube}>
                   <i className="video1" />
                   WATCH TRAILER
@@ -283,31 +286,31 @@ function MoviePage() {
                 target="_blank"
               />
             ))}
-            <h1>Cast</h1>
+            <h1>More Info</h1>
             <ul>
               <li>
-                <a>Maurice</a>
+            <a>Production Company</a>
               </li>
               <li>
-                <a>Verdine</a>
+                <a>Country</a>
               </li>
               <li>
-                <a>Don</a>
+                <a>Status</a>
               </li>
               <li>
-                <a>Philip</a>
+                <a>Revenue</a>
               </li>
               <li>
-                <a>Roland</a>
+            <a>: Marvel Studios</a>
               </li>
               <li>
-                <a>Jessica</a>
+            <a>: US</a>
               </li>
               <li>
-                <a>Larry</a>
+                <a>: {movie?.status}</a>
               </li>
               <li>
-                <a>Ralph</a>
+            <a>: {movie.revenue} INR</a>
               </li>
             </ul>
           </div>
