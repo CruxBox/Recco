@@ -27,18 +27,14 @@ class ApiTestcase(APITestCase):
 
     def test_movies_watchlist_get(self):
         url="http://127.0.0.1:8000/watchlists/"
-        print(url)
         response1=self.test_login()
-        print(response1.data)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + response1.data['token']) 
         response=self.client.get(url,format="json")
         self.assertEqual(response.status_code,200)
 
     def test_movies_watchlist_post(self):
         url="http://127.0.0.1:8000/watchlists/"
-        print(url)
         response1=self.test_login()
-        print(response1.data)
         data={ "name":"temp","description":"test"}
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + response1.data['token']) 
         response=self.client.post(url,data,format="json")
@@ -48,7 +44,7 @@ class ApiTestcase(APITestCase):
     def test_movies_watchlist_put(self):
         url="http://127.0.0.1:8000/watchlists/1/"
         response1=self.test_movies_watchlist_post()
-        data={"name":"HEllooo"}
+        data={"name":"Changed Name"}
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + response1.data['token'])
         response=self.client.put(url,data,format="json")
         self.assertEqual(response.status_code,200)
@@ -58,7 +54,7 @@ class ApiTestcase(APITestCase):
         response1=self.test_movies_watchlist_post()
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + response1.data['token'])
         response=self.client.get(url,format="json")
-        self.assertEqual(response.status_code,200)
+        self.assertEqual(response.status_code,401)
 
     def test_movies_watchlist_delete(self):
         url="http://127.0.0.1:8000/watchlists/1/"
@@ -66,12 +62,3 @@ class ApiTestcase(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + response1.data['token'])
         response=self.client.delete(url)
         self.assertEqual(response.status_code,204)
-
-
-    
-
-
-
-
-
-    
