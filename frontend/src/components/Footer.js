@@ -4,9 +4,9 @@ function Footer() {
   return (
         <div className="Footer">
             <footer>
-              <div className="container">
-                <div className="row">
-                  <div className="logo">
+              <div className="container1">
+                <div className="row1">
+                  <div className="logo1">
                     Recco
                   </div>
                   <div className="social">
