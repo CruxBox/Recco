@@ -50,5 +50,18 @@ class UrlTest(SimpleTestCase):
         url=reverse('downvote_comment',args=['1'])
         self.assertEqual(resolve(url).func,downvote_comment )
 
+class ApiTestcase(APITestCase):
+    def test_movies_search(self):
+        url="http://127.0.0.1:8000/movies/search/?query=test&language=en&max_results=10"
+        print(url)
+        response=self.client.get(url,format="json")
+        print(response.data)
+        self.assertEqual(response.status_code,200)
+
+    
+
+
+
+
 
     

@@ -29,7 +29,7 @@ function Navbar() {
 var loginButton;
 console.log(localStorage.getItem("data"))
 if (localStorage.getItem("data")) {
-  loginButton ="Logout";
+  loginButton ="Login/Signup";
 } 
 else {
   loginButton ="Login/Signup";
