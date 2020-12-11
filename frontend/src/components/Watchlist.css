@@ -7,8 +7,7 @@
     transition: 0.3s;
     width: 10%;
     border-radius: 5px;
-    background-image: url("https://cdn11.bigcommerce.com/s-ydriczk/images/stencil/1280x1280/products/89058/93685/Joker-2019-Final-Style-steps-Poster-buy-original-movie-posters-at-starstills__62518.1572351179.jpg?c=2?imbypass=on" );
-    background-size: cover;
+   background-size: cover;
     height: 200px;
     display: inline-block;
   overflow-y: hidden;
@@ -25,7 +24,19 @@
       color: white;
       margin-bottom: 20px;
       margin-top: 20px;
+      border-bottom: 3px solid white;
+      padding-bottom: 4px;
+      
+      
   }
+  .heading{
+      margin-left:43%;
+      margin-right: 43%;
+  }
+  .heading1{
+    margin-left:43%;
+    margin-right: 42.5%;
+}
   h3{
     font-size: 15px;
     color: white;

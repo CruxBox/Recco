@@ -42,7 +42,8 @@ function Watchlist() {
   return (
     <div className="Watchlist">
       <div class="row1">
-        <h2>Owned Watchlists</h2>
+          <div className="heading">
+        <h2>Owned Watchlists</h2></div>
         {owned.map((watch, i) => {
           return (
             <div class="row2" key={i}>
@@ -57,7 +58,8 @@ function Watchlist() {
       </div>
 
       <div class="row3">
-        <h2>Shared Watchlists</h2>
+          <div className="heading1">
+        <h2>Shared Watchlists</h2></div>
         {shared &&
           shared.map((watch, i) => {
             return (

@@ -33,14 +33,8 @@ export default function Card({ id }) {
   }, []);
 
   return (
-    <div className="card">
-      <img
-        key={movie.id}
-        onClick={() => history.push(`/movie/${movie.id}`)}
-        className={`row_poster`}
-        src={`${base_url}${movie.poster_path}`}
-        alt={movie.name}
-      />
+    <div className="card" style={{"backgroundImage":`url(${base_url}${movie.poster_path})`}}   onClick={() => history.push(`/movie/${movie.id}`)}>
+
     </div>
   );
 }
