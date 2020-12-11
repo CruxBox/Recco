@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { UserContext } from './Auth/userContext';
 import axios from "axios";
+import { toast } from 'react-toastify';
 import "./MoviePage.css";
 const base_url = "https://image.tmdb.org/t/p/original";
 
 function MoviePage() {
+  const { user } = React.useContext(UserContext);
   // const [isLoaded, setIsLoaded] = useState(false);
   let { movieId } = useParams();
   const [movie, setMovie] = useState({
@@ -51,11 +54,14 @@ function MoviePage() {
                 break;
               case 232:
                 temp.className = "zee5";
+              case 192:
+                response.data.youtube = offer.urls.standard_web;
                 break;
               default:
                 continue;
             }
             if (!exist.includes(temp.className)) {
+              temp.id = offer.provider_id;
               temp.url = offer.urls.standard_web;
               provider.push(temp);
               console.log(temp);
@@ -84,10 +90,77 @@ function MoviePage() {
       }
     }
   }
-  const ageid = "1";
+
+ function add_to_fav(e){
+   e.preventDefault()
+   var info=JSON.parse(localStorage.getItem("user"))
+   console.log(info.user.favourite)
+   console.log(":hellooo")
+   var data={}
+   data.movies=[{tmdb_id:movie.id}]
+   var config = {
+    method: 'post',
+    url: `http://127.0.0.1:8000/watchlists/${info.user.favourite}/add`,
+    headers: { 
+      'Authorization': `Token ${info.token}`, 
+      'Content-Type': 'application/json'
+    },
+    data : data
+  };
+  axios(config)
+  .then(function (response) {
+    console.log(JSON.stringify(response.data));
+    toast.success('Added to favourites', {
+      position: "bottom-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      });
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+ }
+ function add_to_seen(e){
+  e.preventDefault()
+  var info=JSON.parse(localStorage.getItem("user"))
+  console.log(info.user.favourite)
+  console.log(":hellooo")
+  var data={}
+  data.movies=[{tmdb_id:movie.id}]
+  var config = {
+   method: 'post',
+   url: `http://127.0.0.1:8000/watchlists/${info.user.seen}/add`,
+   headers: { 
+     'Authorization': `Token ${info.token}`, 
+     'Content-Type': 'application/json'
+   },
+   data : data
+ };
+ axios(config)
+ .then(function (response) {
+   console.log(JSON.stringify(response.data));
+   toast.success('Added to seen list', {
+     position: "bottom-right",
+     autoClose: 2000,
+     hideProgressBar: false,
+     closeOnClick: true,
+     pauseOnHover: true,
+     draggable: true,
+     progress: undefined,
+     });
+ })
+ .catch(function (error) {
+   console.log(error);
+ });
+}
+
   return (
     <div>
-      <div class="Moviepage">
+      <div className="Moviepage">
         <div className="full">
           <div className="main">
             <div
@@ -115,11 +188,11 @@ function MoviePage() {
                   {movie.release_date}
                 </p>
                 <p className="special">{truncate(movie?.overview, 400)}</p>
-                <a className="video" href="#">
+                <a className="video" href={movie?.youtube}>
                   <i className="video1" />
                   WATCH TRAILER
                 </a>
-                <a className="book" href="#">
+                <a className="book" onClick={add_to_fav}>
                   <i className="book1" />
                   ADD TO WATCHLIST
                 </a>
@@ -145,7 +218,7 @@ function MoviePage() {
                       <input
                         type="text"
                         className="form-control"
-                        name
+                        name=""
                         placeholder="Name"
                       />
                     </div>
@@ -153,7 +226,7 @@ function MoviePage() {
                       <input
                         type="text"
                         className="form-control"
-                        name
+                        name=""
                         placeholder="Your Rating"
                       />
                     </div>
@@ -169,7 +242,7 @@ function MoviePage() {
                   </div>
                   <div className="row">
                     <div className="button text-right">
-                      <a href>REVIEW</a>
+                      <a>REVIEW</a>
                     </div>
                   </div>
                 </div>
@@ -198,9 +271,9 @@ function MoviePage() {
                 search("tmdb:score", movie.meta_data.scoring, "provider_type")}
             </a>
             <h1>Now Streaming</h1>
-            {providers.map((offer) => (
+            {providers.map((offer,i) => (
               <a
-                key={offer.className}
+                key={i}
                 className={offer.className}
                 href={offer.url}
                 target="_blank"

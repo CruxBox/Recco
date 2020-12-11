@@ -6,9 +6,12 @@ User = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
+
+    favourite = serializers.ReadOnlyField(source='get_favourite_watchlist_id')
+    seen = serializers.ReadOnlyField(source='get_seen_watchlist_id')
     class Meta:
         model = User
-        fields = ('id', 'username', 'email','contribution')
+        fields = ('id', 'username', 'email','contribution','favourite','seen')
 
 
 class RegisterSerializer(serializers.ModelSerializer):

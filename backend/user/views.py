@@ -39,7 +39,6 @@ def login(request):
         return Response({'error': 'Invalid Credentials'},
                         status=status.HTTP_404_NOT_FOUND)
     token, _ = Token.objects.get_or_create(user=user)
-    print(token,_,token.key)
     return Response({
     "user": UserSerializer(user).data,
     "token": Token.objects.get_or_create(user=user)[0].key,

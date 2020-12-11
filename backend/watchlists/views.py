@@ -74,7 +74,7 @@ def get_watchlist_details(request, id):
             return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
 
 
-@api_view(('PATCH',))
+@api_view(('POST',))
 @authentication_classes((TokenAuthentication, ))
 def add_to_watchlist(request, id):
     if request.method == "POST":

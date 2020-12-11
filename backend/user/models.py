@@ -21,3 +21,11 @@ class User(AbstractUser):
     
     def get_seen_watchlist(self):
         return self.watchlists.filter(name="Seen").first()
+
+    @property
+    def get_favourite_watchlist_id(self):
+        return self.watchlists.filter(name="Favourites").first().id
+    
+    @property
+    def get_seen_watchlist_id(self):
+        return self.watchlists.filter(name="Seen").first().id

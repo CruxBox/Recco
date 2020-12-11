@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
 import loginImg from "../../login.svg";
+import { UserContext } from './userContext';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from "react-toastify";
 
 export const Register = (props) => {
+  const { login } = React.useContext(UserContext);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,6 +41,7 @@ export const Register = (props) => {
           draggable: true,
           progress: undefined,
           });
+          login(response.data)
           setUsername("");
           setPassword("");
           setEmail("");

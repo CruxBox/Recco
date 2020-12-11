@@ -41,7 +41,7 @@ export const Login = (props) => {
           draggable: true,
           progress: undefined,
           });
-          login(response.data)
+          login(JSON.stringify(response.data))
           setUsername("");
           setPassword("")
           history.push({

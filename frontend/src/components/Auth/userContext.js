@@ -14,19 +14,18 @@ export const  UserProvider = ({ children }) => {
         auth: true,
         details:user.user
       }));
-      console.log(user)
     };
   
     // Logout updates the user data to default
     const logout = (user) => {
+      var info=JSON.parse(localStorage.getItem("user"))
       var config = {
         method: 'delete',
         url: 'http://127.0.0.1:8000/users/token-auth/logout',
         headers: { 
-          'Authorization': `Token ${user.token}`
+          'Authorization': `Token ${info.token}`
         },
       };
-      
       axios(config)
       .then(function (response) {
       })
