@@ -13,11 +13,12 @@ class MovieSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
-		fields = ['username']
+		fields = ['id','username']
 
 class WatchlistsSerializer(serializers.ModelSerializer):
 	owner = UserSerializer()
 	movies = MovieSerializer(many=True)
+	shared_with = UserSerializer(many=True)
 
 	class Meta:
 		model = Watchlist
