@@ -1,7 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { UserContext } from './Auth/userContext';
+
 import './Navbar.css';
 function Navbar() {
+  const { user,logout } = React.useContext(UserContext);
   const [name, setName] = useState("");
   const history = useHistory({});
  function handleSubmit(event) {
@@ -25,22 +28,15 @@ function Navbar() {
     console.log(error);
   });
   } 
-
-var loginButton;
-console.log(localStorage.getItem("data"))
-if (localStorage.getItem("data")) {
-  loginButton ="Login/Signup";
-} 
-else {
-  loginButton ="Login/Signup";
-}
+  useEffect(() => {
+  }, [user]);
   return (
     <div className="Navbar">
       <header>
         <div className="container">
           <div className="row">
             <div className="brand-name"> 
-              <a href className="logo">Recco</a>
+              <a className="logo">Recco</a>
             </div>
       <div className="wrap">
         <form onSubmit={handleSubmit}>
@@ -59,7 +55,7 @@ else {
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/upcoming">Upcoming</Link></li>
                 <li><Link to="/watchlist">My Watchlist</Link></li>
-                <li><Link to="/login">{loginButton}</Link></li>
+  <li>{!user.auth && <Link to="/login"> Login </Link>}{user.auth && <a onClick={logout(user)} > Logout </a>}</li>
               </ul>
             </div>
           </div>

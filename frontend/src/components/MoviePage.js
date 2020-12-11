@@ -128,7 +128,7 @@ function MoviePage() {
             </div>
           </div>
         </div>
-        <div class="part">
+        <div className="part">
           <section className="contact-us" id="contact">
             <div className="container">
               <div className="row"></div>
