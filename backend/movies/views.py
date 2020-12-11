@@ -4,7 +4,8 @@ import json
 from django.utils.formats import get_format
 from datetime import datetime
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
@@ -100,6 +101,8 @@ def get_movie_details(request,movie_id):
 def get_max_results(**kwargs):
     if('max_results' not in kwargs.keys()):
         return 1
+    elif kwargs['max_results'] == None:
+    	return 1
     else:
         return int(kwargs['max_results'])
 
@@ -114,6 +117,7 @@ def get_all_comments(request):
 
 @api_view(('PUT',))
 @permission_classes((AllowAny,))
+@authentication_classes((TokenAuthentication, ))
 def edit_comment(request, comment_id):
 	"""
 	Incoming args: movie id
@@ -123,8 +127,14 @@ def edit_comment(request, comment_id):
 	except Comment.DoesNotExist:
 		return Response(status = status.HTTP_404_NOT_FOUND)
 
+	if request.user != comment.user:
+		return Response({'details': 'You do not have the permission'}, status=status.HTTP_401_UNAUTHORIZED)
+
 	if request.method == "PUT":
-		serializer = CommentSerializer(comment, data = request.data)
+		tempData = request.data.copy()
+		tempData['user'] = comment.user.pk
+		tempData['movie'] = comment.movie.pk
+		serializer = CommentSerializer(comment, data = tempData)
 		data = {}
 		if(serializer.is_valid()):
 			serializer.save()
@@ -135,20 +145,24 @@ def edit_comment(request, comment_id):
 
 @api_view(('DELETE',))
 @permission_classes((AllowAny,))
+@authentication_classes((TokenAuthentication, ))
 def delete_comment(request, comment_id):
 	"""
 	Incoming args: comment_id
 	"""
 	try:
-		comment = Comment.objects.filter(pk = comment_id)
+		comment = Comment.objects.get(pk = comment_id)
 	except Comment.DoesNotExist:
 		return Response(status = status.HTTP_404_NOT_FOUND)
+
+	if request.user != comment.user:
+			return Response({'details': 'You do not have the permission'}, status=status.HTTP_401_UNAUTHORIZED)
 
 	if request.method == "DELETE":
 		stat = comment.delete()
 		data = {}
 		if(stat):
-			data['success'] = 'update successful'
+			data['success'] = 'delete successful'
 		else:
 			data['failure'] = 'delete failed'
 		return Response(data = data)
@@ -156,22 +170,21 @@ def delete_comment(request, comment_id):
 
 @api_view(('POST','GET',))
 @permission_classes((AllowAny,))
+@authentication_classes((TokenAuthentication, ))
 def get_or_post_comment(request, movie_id):
 	"""
 	Info for generating movie instance should come from the frontend if request is POST
 	That is, [tmdb_id]
 	"""
+	try:
+		movie = Movie.objects.get(tmdb_id = movie_id)
+		print(movie)
+	except Movie.DoesNotExist:
+		movie = Movie.objects.create(tmdb_id = movie_id)
+		#call a view to fill the movie data. TODO://
 	if request.method == 'POST':
 		data = request.data
-		try:
-			movie = Movie.objects.get(tmdb_id = movie_id)
-			print(movie)
-		except Movie.DoesNotExist:
-			movie = Movie.objects.create(tmdb_id = movie_id)
-			movie.save()
-			#call a view to fill the movie data. TODO://
-
-		comment = Comment.objects.create(content = data['content'], movie = movie)
+		comment = Comment.objects.create(content = data['content'], movie = movie, user = request.user)
 		if comment:
 			return Response({'success':'successfully posted'}, status = status.HTTP_201_CREATED)
 		else:
@@ -181,10 +194,9 @@ def get_or_post_comment(request, movie_id):
 		Incoming args: movie id
 		"""
 		try:
-			comments = Comment.objects.filter(movie__tmdb_id = movie_id)
+			comments = Comment.objects.filter(movie = movie.pk)
 		except Comment.DoesNotExist:
 			return Response(status = status.HTTP_404_NOT_FOUND)
-
 		serializer = CommentSerializer(comments, many = True)
 		return Response(serializer.data)
 
@@ -193,15 +205,15 @@ def get_or_post_comment(request, movie_id):
 @permission_classes((AllowAny,))
 def get_comment_by_id(request, comment_id):
 	try:
-		comments = Comment.objects.get(pk = comment_id)
+		comment = Comment.objects.get(pk = comment_id)
 	except Comment.DoesNotExist:
 		return Response(status = status.HTTP_404_NOT_FOUND)
 
-	serializer = CommentSerializer(comments)
+	serializer = CommentSerializer(comment)
 	return Response(serializer.data)
 
 
-@api_view(('PUT',))
+@api_view(('POST',))
 @permission_classes((AllowAny,))
 def upvote_comment(request, comment_id):
 	try:
@@ -210,6 +222,7 @@ def upvote_comment(request, comment_id):
 		return Response(status = status.HTTP_404_NOT_FOUND)
 
 	if comment:
+		#Change contribution of comment owner. TODO://
 		comment.score += 1;
 		comment.save()
 		return Response({'success':'successfully upvoted'})
@@ -226,6 +239,7 @@ def downvote_comment(request, comment_id):
 		return Response(status = status.HTTP_404_NOT_FOUND)
 
 	if comment:
+		#Change contribution of comment owner. TODO://
 		comment.score -= 1;
 		comment.save()
 		return Response({'success':'successfully downvoted'})
