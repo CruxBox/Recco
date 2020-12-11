@@ -61,6 +61,13 @@ p.age {
 	margin:1.5em 0;
 	margin-bottom: 2.5em;
 }
+p.age1 {
+	color:#f4f4f4;
+	font-size:1.15em;
+	font-weight:400;
+	margin:1.5em 0;
+	margin-bottom: 2.5em;
+}
 
 p.special {
 	color:#f4f4f4;
