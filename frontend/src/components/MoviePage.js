@@ -5,23 +5,23 @@ import "./MoviePage.css";
 const base_url = "https://image.tmdb.org/t/p/original";
 
 function MoviePage() {
+  // const [isLoaded, setIsLoaded] = useState(false);
   let { movieId } = useParams();
-  console.log(movieId);
   const [movie, setMovie] = useState({
-    genres: "hello",
+    genres: " ",
     meta_data: {
-      genres: "hello",
-      scoring: "hello",
+      genres: ["", ""],
+      scoring: "",
       offers: [{ urls: { standard_web: "" } }],
     },
   });
   const [providers, setProviders] = useState([]);
   useEffect(() => {
     var id = movieId;
-    function get_movie_details(id) {
+    async function get_movie_details(id) {
       var config = {
         method: "get",
-        url: `http://0.0.0.0:8000/movies/${id}/`,
+        url: `http://127.0.0.1:8000/movies/${id}/`,
         headers: {
           "Content-Type": "application/json",
         },
@@ -29,12 +29,10 @@ function MoviePage() {
       axios(config)
         .then(function (response) {
           console.log(response.data);
-          setMovie(response.data);
           var provider = [];
           var exist = [];
-          for (let offer of movie.meta_data.offers) {
+          for (let offer of response.data.meta_data.offers) {
             var temp = {};
-            //console.log(offer)
             switch (offer.provider_id) {
               case 8:
                 temp.className = "netflix";
@@ -60,19 +58,21 @@ function MoviePage() {
             if (!exist.includes(temp.className)) {
               temp.url = offer.urls.standard_web;
               provider.push(temp);
-              console.log(temp)
+              console.log(temp);
               exist.push(temp.className);
             }
           }
           setProviders(provider);
-          console.log(provider);
+          setMovie(response.data);
+          //setIsLoaded(true)
+          //console.log(provider);
         })
         .catch(function (error) {
           console.log(error);
         });
     }
     get_movie_details(id);
-  }, []);
+  }, [movieId]);
 
   function truncate(str, n) {
     return str?.length > n ? str.substr(0, n - 1) + "..." : str;
@@ -180,21 +180,24 @@ function MoviePage() {
             <h1>Ratings</h1>
             <a className="imdb" href="#">
               <i className="imdb1" /> :{" "}
-              {movie.meta_data.scoring && search("imdb:score", movie.meta_data.scoring, "provider_type")}
+              {movie.meta_data.scoring &&
+                search("imdb:score", movie.meta_data.scoring, "provider_type")}
             </a>
             <a className="rot" href="#">
               <i className="rot1" /> :{" "}
-              {movie.meta_data.scoring && search(
-                "tmdb:popularity",
-                movie.meta_data.scoring,
-                "provider_type"
-              )}
+              {movie.meta_data.scoring &&
+                search(
+                  "tmdb:popularity",
+                  movie.meta_data.scoring,
+                  "provider_type"
+                )}
             </a>
             <a className="tmdb" href="#">
               <i className="tmdb1" /> :{" "}
-              {movie.meta_data.scoring && search("tmdb:score", movie.meta_data.scoring, "provider_type")}
+              {movie.meta_data.scoring &&
+                search("tmdb:score", movie.meta_data.scoring, "provider_type")}
             </a>
-              <h1>Now Streaming</h1>
+            <h1>Now Streaming</h1>
             {providers.map((offer) => (
               <a
                 key={offer.className}
