@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 class User(AbstractUser):
     ## add multiple fields later
+    contribution = models.IntegerField(blank=True,null=True,default=0)
 
 
 

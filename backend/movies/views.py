@@ -98,7 +98,7 @@ def get_movie_details(request,movie_id):
 
 
 def get_max_results(**kwargs):
-    if('max_results' not in kwargs.keys()):
+    if(kwargs['max_results'] is None):
         return 1
     else:
         return int(kwargs['max_results'])
