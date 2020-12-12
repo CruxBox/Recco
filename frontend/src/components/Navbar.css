@@ -14,7 +14,7 @@ body{
 }
 
 .container{
-	max-width: 1140px;
+	max-width: 1300px;
 	margin: auto;
 }
 .container .row{
@@ -40,6 +40,7 @@ position: absolute;
 header .row{
 	justify-content:space-between;
 	align-items: center; 
+
 }
 
 header .brand-name a{
@@ -130,9 +131,9 @@ header .navbar ul li a:active::before{
 
 /*Resize the wrap to see the search bar change!*/
 .wrap{
-  width: 30%;
+  width: 26%;
   position: absolute;
   top: 50%;
-  left: 38%;
+  left: 33%;
   transform: translate(-50%, -50%);
 }

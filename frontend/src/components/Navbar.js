@@ -54,6 +54,7 @@ function Navbar() {
               <ul>
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/upcoming">Upcoming</Link></li>
+                <li><Link to="/recco">My Reccomendations</Link></li>
                 <li><Link to="/watchlist">My Watchlist</Link></li>
   <li>{!user.auth && <Link to="/login"> Login/Register </Link>}{user.auth && <a onClick={()=>logout(user)} > Logout </a>}</li>
               </ul>
