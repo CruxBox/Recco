@@ -266,13 +266,20 @@ def search_response_with_tmdb_id(request):
 @api_view(('GET',))
 @permission_classes((AllowAny,))
 def recommend(request):
+	username = request.query_params.get('username', None)
+	if username == None:
+		return Response({'Error':'Provide username'}, status = status.HTTP_400_BAD_REQUEST)
 	df=pd.DataFrame(list(Rating.objects.all().values()))
 	nu=df.user_id.unique().shape[0]
-	current_user_id= request.user.id
+	try:
+		user = User.objects.get(username = username)
+	except User.DoesNotExist:
+		return Response(status = status.HTTP_404_NOT_FOUND)
+	current_user_id = user.id
 	# if new user not rated any movie
 	if current_user_id>nu:
 		movie=Movie.objects.get(id=1)
-		q=Rating(user=request.user,movie=movie,rating=0)
+		q=Rating(user=user,movie=movie,rating=0)
 		q.save()
 
 	print("Current user id: ",current_user_id)
