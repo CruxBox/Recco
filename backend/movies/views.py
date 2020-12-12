@@ -95,7 +95,7 @@ def get_movie_details(request,movie_id):
 		status_ = status.HTTP_200_OK
 	except Movie.DoesNotExist:
 		movie = Movie.objects.create(tmdb_id = movie_id)
-		movie.save()	
+		movie.save()
 		status_ = status.HTTP_201_CREATED
 	data = ApiM.get_movie_details(movie_id)
 	return Response(data,status=status_)
@@ -123,7 +123,7 @@ def get_all_comments(request):
 @authentication_classes((TokenAuthentication, ))
 def edit_comment(request, comment_id):
 	"""
-	Incoming args: movie id
+	Incoming args: comment_id, content
 	"""
 	try:
 		comment = Comment.objects.get(pk = comment_id)
@@ -176,16 +176,21 @@ def delete_comment(request, comment_id):
 @authentication_classes((TokenAuthentication, ))
 def get_or_post_comment(request, movie_id):
 	"""
-	Info for generating movie instance should come from the frontend if request is POST
-	That is, [tmdb_id]
+	Parameters: tmdb_id, content(if POST)
 	"""
 	try:
 		movie = Movie.objects.get(tmdb_id = movie_id)
 		print(movie)
 	except Movie.DoesNotExist:
-		data = ApiM.get_movie_details(movie_id)
 		movie = Movie.objects.create(tmdb_id = movie_id)
-		#call a view to fill the movie data. TODO://
+
+		data = ApiM.get_movie_details(movie_id)
+		movie.imdb_id = data['imdb_id']
+		movie.vote_average = data['vote_average']
+		movie.vote_count = data['vote_count']
+		movie.popularity = data['popularity']
+		movie.save()
+
 	if request.method == 'POST':
 		data = request.data
 		comment = Comment.objects.create(content = data['content'], movie = movie, user = request.user)
@@ -208,6 +213,9 @@ def get_or_post_comment(request, movie_id):
 @api_view(('GET',))
 @permission_classes((AllowAny,))
 def get_comment_by_id(request, comment_id):
+	"""
+	Parameters: comment_id
+	"""
 	try:
 		comment = Comment.objects.get(pk = comment_id)
 	except Comment.DoesNotExist:
@@ -220,6 +228,9 @@ def get_comment_by_id(request, comment_id):
 @api_view(('POST',))
 @permission_classes((AllowAny,))
 def upvote_comment(request, comment_id):
+	"""
+	Parameters: comment_id
+	"""
 	try:
 		comment = Comment.objects.get(pk = comment_id)
 	except Comment.DoesNotExist:
@@ -237,6 +248,9 @@ def upvote_comment(request, comment_id):
 @api_view(('POST',))
 @permission_classes((AllowAny,))
 def downvote_comment(request, comment_id):
+	"""
+	Parameters: comment_id
+	"""
 	try:
 		comment = Comment.objects.get(pk = comment_id)
 	except Comment.DoesNotExist:
@@ -254,6 +268,10 @@ def downvote_comment(request, comment_id):
 @api_view(('GET',))
 @permission_classes((AllowAny,))
 def search_response_with_tmdb_id(request):
+	"""
+	This is different from get_movie_details.
+	Parameters: query, tmdb_id
+	"""
 	kwargs = dict()
 	args = ['query', 'tmdb_id']
 	for arg in args:
@@ -266,6 +284,9 @@ def search_response_with_tmdb_id(request):
 @api_view(('GET',))
 @permission_classes((AllowAny,))
 def recommend(request):
+	"""
+	Parameters: username
+	"""
 	username = request.query_params.get('username', None)
 	if username == None:
 		return Response({'Error':'Provide username'}, status = status.HTTP_400_BAD_REQUEST)
@@ -292,3 +313,38 @@ def recommend(request):
 	movie_list=list(Movie.objects.filter(id__in = pred_idxs_sorted,).order_by(preserved)[:10])
 	serializer = MoviesSerializer(movie_list, many = True)
 	return Response(serializer.data)
+
+
+@api_view(('POST',))
+@permission_classes((AllowAny,))
+@authentication_classes((TokenAuthentication, ))
+def post_rating(request):
+	"""
+	Parameters: rating, movie_id
+	"""
+	rating_val = request.query_params.get('rating', None)
+	movie_id = request.query_params.get('movie_id', None)
+
+	if rating_val == None or movie_id == None:
+		return Response({'Error':'A parameter is missing'}, status = status.HTTP_400_BAD_REQUEST)
+
+	user = request.user
+	try:
+		movie = Movie.objects.get(tmdb_id = movie_id)
+	except Movie.DoesNotExist:
+		movie = Movie.objects.create(tmdb_id = movie_id)
+
+		data = ApiM.get_movie_details(movie_id)
+		movie.imdb_id = data['imdb_id']
+		movie.vote_average = data['vote_average']
+		movie.vote_count = data['vote_count']
+		movie.popularity = data['popularity']
+		movie.save()
+	try:
+		rating = Rating.objects.get(user = user, movie = movie)
+	except Rating.DoesNotExist:
+		rating = Rating.objects.create(user = user, movie = movie)
+	rating.rating = rating_val
+	rating.save()
+
+	return Response(status = status.HTTP_201_CREATED)
