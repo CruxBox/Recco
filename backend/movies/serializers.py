@@ -21,4 +21,4 @@ class MoviesSerializer(serializers.ModelSerializer):
 	comments = CommentSerializer(many = True)
 	class Meta:
 		model = Movie
-		fields = ['__all__', 'comments']
+		fields = ['tmdb_id', 'comments']

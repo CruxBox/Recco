@@ -1,7 +1,9 @@
 import json
-
+import numpy as np 
+import pandas as pd
 
 from django.utils.formats import get_format
+from django.db.models import Case, When
 from datetime import datetime
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
@@ -14,6 +16,7 @@ from .models import *
 from .serializers import *
 
 from backend.app import IncomingApiManager as ApiM
+from .recom import *
 
 @api_view(('GET',))
 @permission_classes((AllowAny,))
@@ -180,6 +183,7 @@ def get_or_post_comment(request, movie_id):
 		movie = Movie.objects.get(tmdb_id = movie_id)
 		print(movie)
 	except Movie.DoesNotExist:
+		data = ApiM.get_movie_details(movie_id)
 		movie = Movie.objects.create(tmdb_id = movie_id)
 		#call a view to fill the movie data. TODO://
 	if request.method == 'POST':
@@ -257,3 +261,27 @@ def search_response_with_tmdb_id(request):
 
 	data = ApiM.search_response_with_tmdb_id(**kwargs)
 	return Response(data)
+
+# for recommendation
+@api_view(('GET',))
+@permission_classes((AllowAny,))
+def recommend(request):
+	df=pd.DataFrame(list(Rating.objects.all().values()))
+	nu=df.user_id.unique().shape[0]
+	current_user_id= request.user.id
+	# if new user not rated any movie
+	if current_user_id>nu:
+		movie=Movie.objects.get(id=1)
+		q=Rating(user=request.user,movie=movie,rating=0)
+		q.save()
+
+	print("Current user id: ",current_user_id)
+	prediction_matrix,Ymean = Myrecommend()
+	my_predictions = prediction_matrix[:,current_user_id-1]+Ymean.flatten()
+	pred_idxs_sorted = np.argsort(my_predictions)
+	pred_idxs_sorted[:] = pred_idxs_sorted[::-1]
+	pred_idxs_sorted=pred_idxs_sorted+1
+	preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pred_idxs_sorted)])
+	movie_list=list(Movie.objects.filter(id__in = pred_idxs_sorted,).order_by(preserved)[:10])
+	serializer = MoviesSerializer(movie_list, many = True)
+	return Response(serializer.data)
