@@ -216,7 +216,7 @@ function MoviePage() {
                 <div className="contact-form">
                   <div className="row">
                     <div className="text">
-                      <h2>Review This Movie</h2>
+                      <h3>Review This Movie</h3>
                       <p>You can give your personal rating and review here</p>
                     </div>
                   </div>
