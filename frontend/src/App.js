@@ -9,6 +9,7 @@ import MoviePage from './components/MoviePage';
 import {BrowserRouter as Router,Switch,Route} from 'react-router-dom'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Upcoming from './components/Upcoming';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/" exact component={Home} />
           <Route path="/home" component={Home} />
           <Route path="/login" component={Signup} />
+          <Route path="/upcoming" component={Upcoming} />
           <Route path="/list" component={Movielist}/>
           <Route path="/watchlist" component={Watchlist}/>
           <Route path="/movie/:movieId" component={MoviePage}/>
