@@ -8,7 +8,6 @@ class Movie(models.Model):
 	vote_average = models.FloatField(null = True)
 	vote_count = models.IntegerField(null = True)
 	popularity = models.FloatField(null = True)
-	# genre = models.CharField(max_length=100, default = "Thriller")
 
 	def __str__(self):
 		return str(self.tmdb_id);
