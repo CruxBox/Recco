@@ -18,5 +18,6 @@ urlpatterns = [
     path('comments/edit/<int:comment_id>', edit_comment, name = 'edit_comment'),
     path('comments/delete/<int:comment_id>', delete_comment, name = 'delete_comment'),
     path('comments/upvote/<int:comment_id>', upvote_comment, name = 'upvote_comment'),
-    path('comments/downvote/<int:comment_id>', downvote_comment, name = 'downvote_comment')
+    path('comments/downvote/<int:comment_id>', downvote_comment, name = 'downvote_comment'),
+    path('rec', recommend)
 ]
