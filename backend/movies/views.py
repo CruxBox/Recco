@@ -291,26 +291,35 @@ def recommend(request):
 	if username == None:
 		return Response({'Error':'Provide username'}, status = status.HTTP_400_BAD_REQUEST)
 	df=pd.DataFrame(list(Rating.objects.all().values()))
-	nu=df.user_id.unique().shape[0]
 	try:
 		user = User.objects.get(username = username)
 	except User.DoesNotExist:
 		return Response(status = status.HTTP_404_NOT_FOUND)
 	current_user_id = user.id
+	nu = False
+	temp = Rating.objects.filter(user = user)
+	if len(temp) == 0:
+		nu = True
 	# if new user not rated any movie
-	if current_user_id>nu:
-		movie=Movie.objects.get(id=1)
-		q=Rating(user=user,movie=movie,rating=0)
+	if nu:
+		try:
+			movie = Movie.objects.get(id=1)
+		except Movie.DoesNotExist:
+			movie = Movie.objects.create(tmdb_id = 1)
+		q=Rating(user=user,movie=movie,rating=1)
 		q.save()
 
 	print("Current user id: ",current_user_id)
-	prediction_matrix,Ymean = Myrecommend()
-	my_predictions = prediction_matrix[:,current_user_id-1]+Ymean.flatten()
+	prediction_matrix,Ymean,user_ids,rev_movie_ids = Myrecommend()
+	my_predictions = prediction_matrix[:,user_ids[current_user_id]-1]+Ymean.flatten()
 	pred_idxs_sorted = np.argsort(my_predictions)
 	pred_idxs_sorted[:] = pred_idxs_sorted[::-1]
 	pred_idxs_sorted=pred_idxs_sorted+1
 	preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pred_idxs_sorted)])
-	movie_list=list(Movie.objects.filter(id__in = pred_idxs_sorted,).order_by(preserved)[:10])
+	new_list = list()
+	for i in pred_idxs_sorted:
+		new_list.append(rev_movie_ids[i])
+	movie_list=list(Movie.objects.filter(id__in = new_list,).order_by(preserved)[:10])
 	serializer = MoviesSerializer(movie_list, many = True)
 	return Response(serializer.data)
 

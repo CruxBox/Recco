@@ -43,13 +43,27 @@ def Myrecommend():
 		return flattenParams(Xgrad, Thetagrad)
 
 	df=pd.DataFrame(list(Rating.objects.all().values()))
+	print(df)
+	user_ids = dict()
+	movie_ids = dict()
+	rev_movie_ids = dict()
+	c1=1
+	c2=1
+	for row in df.itertuples():
+		if row[2] not in user_ids.keys():
+			user_ids[row[2]] = c1
+			c1+=1
+		if row[3] not in movie_ids.keys():
+			movie_ids[row[3]] = c2
+			rev_movie_ids[c2] = row[3]
+			c2+=1
 	mynu=df.user_id.unique().shape[0]
 	mynm=df.movie_id.unique().shape[0]
 	mynf=10
 	Y=np.zeros((mynm,mynu))
 	for row in df.itertuples():
 		print(row)
-		Y[row[3]-1, row[2]-1] = row[4]
+		Y[movie_ids[row[3]]-1, user_ids[row[2]]-1] = row[4]
 	R=np.zeros((mynm,mynu))
 	for i in range(Y.shape[0]):
 		for j in range(Y.shape[1]):
@@ -63,4 +77,7 @@ def Myrecommend():
 	result = scipy.optimize.fmin_cg(cofiCostFunc,x0=myflat,fprime=cofiGrad,args=(Y,R,mynu,mynm,mynf,mylambda),maxiter=40,disp=True,full_output=True)
 	resX, resTheta = reshapeParams(result[0], mynm, mynu, mynf)
 	prediction_matrix = resX.dot(resTheta.T)
-	return prediction_matrix,Ymean
+	print(prediction_matrix.shape)
+	print(Ymean)
+	print(Ymean.shape)
+	return prediction_matrix,Ymean,user_ids,rev_movie_ids
