@@ -64,7 +64,7 @@ function Watchlist() {
           shared.map((watch, i) => {
             return (
               <div class="row2" key={i}>
-                <h3>{watch.name}</h3>
+                <h3>{watch.name} (Shared by {watch.owner.username})</h3>
                 <h5>{watch.description}</h5>
                 {watch.movies.map((movie, id) => {
                   return <Card key={id} id={movie.tmdb_id} />;

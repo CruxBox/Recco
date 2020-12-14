@@ -34,6 +34,11 @@ function MoviePage() {
           console.log(response.data);
           var provider = [];
           var exist = [];
+          if(!response.data.meta_data.offers){
+            setProviders(provider);
+          setMovie(response.data);
+
+          }
           for (let offer of response.data.meta_data.offers) {
             var temp = {};
             switch (offer.provider_id) {
@@ -128,7 +133,6 @@ function MoviePage() {
   e.preventDefault()
   var info=JSON.parse(localStorage.getItem("user"))
   console.log(info.user.favourite)
-  console.log(":hellooo")
   var data={}
   data.movies=[{tmdb_id:movie.id}]
   var config = {
@@ -261,7 +265,7 @@ function MoviePage() {
             <a className="imdb" href="#">
               <i className="imdb1" /> :{" "}
               {movie.meta_data.scoring &&
-                search("imdb:score", movie.meta_data.scoring, "provider_type")}
+                search("imdb:score", movie.meta_data.scoring, "provider_type") || "None"}
             </a>
             <a className="rot" href="#">
               <i className="rot1" /> :{" "}
@@ -270,22 +274,22 @@ function MoviePage() {
                   "tmdb:popularity",
                   movie.meta_data.scoring,
                   "provider_type"
-                )}
+                ) || "None"}
             </a>
             <a className="tmdb" href="#">
               <i className="tmdb1" /> :{" "}
               {movie.meta_data.scoring &&
-                search("tmdb:score", movie.meta_data.scoring, "provider_type")}
+                search("tmdb:score", movie.meta_data.scoring, "provider_type") || "None"}
             </a>
             <h1>Now Streaming</h1>
-            {providers.map((offer,i) => (
+            {providers && providers.map((offer,i) => (
               <a
                 key={i}
                 className={offer.className}
                 href={offer.url}
                 target="_blank"
               />
-            ))}
+            )) || "None"}
             <h1>More Info</h1>
             <ul>
               <li>
@@ -301,10 +305,10 @@ function MoviePage() {
                 <a>Revenue</a>
               </li>
               <li>
-            <a>: Marvel Studios</a>
+            <a>: {movie.production_companies && movie.production_companies[0].name}</a>
               </li>
               <li>
-            <a>: US</a>
+            <a>: {movie.production_countries && movie.production_countries[0].name}</a>
               </li>
               <li>
                 <a>: {movie?.status}</a>

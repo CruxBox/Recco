@@ -81,8 +81,10 @@ def add_to_watchlist(request, id):
         try:
             data = request.data
             watchlist = Watchlist.objects.get(id=id)
+            if request.user != watchlist.owner:
+                return Response({'details': 'You do not have the permission'}, status=status.HTTP_401_UNAUTHORIZED)
             for movie_id in data['movies']:
-                movie = Movie.objects.get(tmdb_id=movie_id['tmdb_id'])
+                movie = Movie.objects.get_or_create(tmdb_id=movie_id['tmdb_id'])[0]
                 watchlist.movies.add(movie)
             response = WatchlistsSerializer(watchlist)
             return Response(response.data, status=status.HTTP_201_CREATED)
@@ -93,12 +95,14 @@ def add_to_watchlist(request, id):
 @api_view(('PATCH',))
 @authentication_classes((TokenAuthentication, ))
 def remove_from_watchlist(request, id):
-    if request.method == "DELETE":
+    if request.method == "PATCH":
         try:
             data = request.data
             watchlist = Watchlist.objects.get(id=id)
+            if request.user != watchlist.owner:
+                return Response({'details': 'You do not have the permission'}, status=status.HTTP_401_UNAUTHORIZED)
             for movie_id in data['movies']:
-                movie = Movie.objects.get(tmdb_id=movie_id['tmdb_id'])
+                movie = Movie.objects.get_or_create(tmdb_id=movie_id['tmdb_id'])[0]
                 watchlist.movies.remove(movie)
             response = WatchlistsSerializer(watchlist)
             return Response(response.data, status=status.HTTP_200_OK)

@@ -6,11 +6,11 @@ const Movielist = ({ history }) => {
   useEffect(() => {
     //[] this indicates only to run page once
     setMovies(history.location.state.data);
-  }, [movies]);
+  }, [history.location.state.name]);
   return (
     <div>
       {movies.map((movie) => (
-        <MovieCard key={movie.id} data={movie} />
+        <MovieCard key={movie?.id || movie?.tmdb_id } data={movie} />
       ))}
     </div>
   );

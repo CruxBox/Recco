@@ -22,6 +22,7 @@ function App() {
           <Route path="/login" component={Signup} />
           <Route path="/upcoming" component={Upcoming} />
           <Route path="/list" component={Movielist}/>
+          <Route path="/reccomendations" component={Movielist}/>
           <Route path="/watchlist" component={Watchlist}/>
           <Route path="/movie/:movieId" component={MoviePage}/>
         </Switch>

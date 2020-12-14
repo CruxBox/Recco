@@ -1,15 +1,15 @@
 
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate,get_user_model
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny
 from rest_framework import generics
-from .serializers import UserSerializer, RegisterSerializer
+from .serializers import UserSerializer, RegisterSerializer,UsersSerializer
 from rest_framework import status
 from rest_framework.response import Response
-
+User=get_user_model()
 
 @permission_classes((AllowAny,))
 class RegisterAPI(generics.GenericAPIView):
@@ -29,6 +29,18 @@ class RegisterAPI(generics.GenericAPIView):
 @api_view(["POST"])
 @permission_classes((AllowAny,))
 def login(request):
+    """
+    description: API for login.
+    parameters:
+      - name: username
+        type: string
+        required: true
+        location: form
+      - name: password
+        type: password
+        required: true
+        location: form
+    """
     username = request.data.get("username")
     password = request.data.get("password")
     if username is None or password is None:
@@ -50,3 +62,10 @@ def login(request):
 def logout(request):
     Token.objects.get(user=request.user).delete()
     return Response({'message':'Logout Successful'},status=status.HTTP_200_OK)
+
+@csrf_exempt
+@api_view(('GET',))
+@authentication_classes((TokenAuthentication, ))
+def list_users(request):
+    users = User.objects.all().exclude(username=request.user.username)
+    return Response(UsersSerializer(users,many=True).data,status=status.HTTP_200_OK)

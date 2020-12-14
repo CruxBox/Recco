@@ -9,7 +9,7 @@ function MovieCard( data ) {
   const [movie, setMovie] = useState("");
   const history = useHistory();
   useEffect(() => {
-    var id = data.data.id;
+    var id = data.data?.id || data.data.tmdb_id;
     function get_movie_details(id) {
       var config = {
         method: 'get',
