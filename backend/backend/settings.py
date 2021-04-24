@@ -29,6 +29,15 @@ ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1']
 
 
 # Application definition
+# we whitelist localhost:3000 because that's where frontend will be served
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = (
+    'http://127.0.0.1:3001',
+    'http://localhost:3001',
+    'http://127.0.0.1:3000',
+    'http://localhost:3000'
+)
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -123,7 +132,7 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.FormParser',
         'rest_framework.parsers.MultiPartParser',
         'rest_framework.parsers.JSONParser',
-        'rest_framework.authentication.TokenAuthentication',
+       # 'rest_framework.authentication.TokenAuthentication',
     ],
 
 }
@@ -157,11 +166,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
-# we whitelist localhost:3000 because that's where frontend will be served
-
-CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_WHITELIST = (
-    'http://127.0.0.1:3000',
-    'http://localhost:3000'
-)

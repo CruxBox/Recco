@@ -5,15 +5,14 @@ import { toast } from 'react-toastify';
 
 
 const localState = JSON.parse(localStorage.getItem("user"));
-console.log("dhfsdjfhsdkfjsdfksdhfkjsdhfjksdhf")
-var state=Object.keys(localState).length === 0 && localState.constructor === Object;
+//var state=Object.keys(localState).length === 0 && localState.constructor === Object;
+var state=true;
 console.log(state)
 export const UserContext = React.createContext({ token: '', auth: !state,details:{} });
 export const  UserProvider = ({ children }) => {
     // User is the name of the "data" that gets stored in context
     //const history = useHistory();
     const [user, setUser] = useState({ token: '', auth: !state,details:{} });
- var a={"user":{"id":15,"username":"test12","email":"te@te.com","contribution":0},"token":"cb283a71a6054d5a52d4b33794d4dd01ae9e8b35"}
     // Login updates the user data with a name parameter
     const login = (user) => {
       setUser((user) => ({
